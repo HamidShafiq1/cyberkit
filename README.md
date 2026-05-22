@@ -2,7 +2,7 @@
 
 A modular, zero-dependency beginner cybersecurity sandbox implementation optimized for client-side cross-platform utility. CyberKit offers simultaneous distribution pipelines via native Terminal CLI interface and lightweight single-page application structure[cite: 1, 2].
 
-LIVE AT: hamidshafiq1.github.io/cyberkit
+LIVE AT: [hamidshafiq1.github.io/cyberkit](https://hamidshafiq1.github.io/cyberkit/)
 
 ## Feature Components
 
