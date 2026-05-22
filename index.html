@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberKit — Beginner Security Toolkit</title>
+    <meta name="description"
+        content="Open-source beginner cybersecurity toolkit. Password strength analyzer, hash generator, and Caesar cipher — runs entirely in your browser.">
+    <meta property="og:title" content="CyberKit — Beginner Security Toolkit">
+    <meta property="og:description"
+        content="Password analyzer · Hash generator · Caesar cipher. No server. No tracking. 100% client-side.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d1117;
+            --surface: #161b22;
+            --surf2: #21262d;
+            --border: #30363d;
+            --border2: #484f58;
+            --green: #3fb950;
+            --blue: #58a6ff;
+            --yellow: #d29922;
+            --red: #f85149;
+            --purple: #bc8cff;
+            --text: #e6edf3;
+            --muted: #7d8590;
+            --muted2: #8b949e;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* ── HEADER ─────────────────────────────────────────────── */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(13, 17, 23, 0.94);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 24px;
+        }
+
+        .hdr {
+            max-width: 960px;
+            margin: 0 auto;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--blue);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: #0d1117;
+        }
+
+        .logo-name {
+            font-family: 'Oxanium', monospace;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: 0.03em;
+        }
+
+        .logo-name span {
+            color: var(--blue);
+        }
+
+        .hdr-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .hdr-badge {
+            background: var(--surf2);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 11px;
+            color: var(--muted2);
+            letter-spacing: 0.05em;
+        }
+
+        .hdr-link {
+            font-size: 12px;
+            color: var(--muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.15s;
+            letter-spacing: 0.04em;
+        }
+
+        .hdr-link:hover {
+            color: var(--text);
+        }
+
+        .hdr-link svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        /* ── HERO ───────────────────────────────────────────────── */
+        .hero {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 72px 24px 56px;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 640px;
+            height: 280px;
+            background: radial-gradient(ellipse at center top, rgba(88, 166, 255, 0.07) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .eyebrow {
+            font-size: 11px;
+            color: var(--blue);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .eyebrow::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 1px;
+            background: var(--blue);
+        }
+
+        .hero h1 {
+            font-family: 'Oxanium', monospace;
+            font-size: clamp(34px, 6vw, 54px);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 4px;
+            height: 0.82em;
+            background: var(--blue);
+            vertical-align: middle;
+            margin-left: 4px;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: 0
+            }
+        }
+
+        .hero-desc {
+            font-size: 14px;
+            color: var(--muted2);
+            line-height: 1.8;
+            max-width: 520px;
+            margin-bottom: 36px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .stat-n {
+            font-family: 'Oxanium', monospace;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .stat-l {
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .sep {
+            width: 1px;
+            height: 36px;
+            background: var(--border);
+        }
+
+        /* ── TOOLS SECTION ──────────────────────────────────────── */
+        .tools {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 24px 80px;
+        }
+
+        /* TAB NAV */
+        .tab-nav {
+            display: flex;
+            gap: 0;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            background: var(--surface);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 13px 8px;
+            background: transparent;
+            border: none;
+            border-right: 1px solid var(--border);
+            cursor: pointer;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.15s;
+        }
+
+        .tab-btn:last-child {
+            border-right: none;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: var(--surf2);
+            color: var(--text);
+        }
+
+        .tab-btn.active {
+            background: var(--surf2);
+            color: var(--text);
+        }
+
+        .tdot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--border2);
+            transition: background 0.15s;
+        }
+
+        .tab-btn[data-tool="pw"].active .tdot {
+            background: var(--green);
+        }
+
+        .tab-btn[data-tool="hash"].active .tdot {
+            background: var(--blue);
+        }
+
+        .tab-btn[data-tool="cc"].active .tdot {
+            background: var(--purple);
+        }
+
+        /* PANEL */
+        .panel {
+            display: none;
+            animation: fadeUp 0.2s ease;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(6px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .card-hdr {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-family: 'Oxanium', monospace;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cdot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .cdot-g {
+            background: var(--green);
+        }
+
+        .cdot-b {
+            background: var(--blue);
+        }
+
+        .cdot-p {
+            background: var(--purple);
+        }
+
+        .card-tag {
+            font-size: 10px;
+            color: var(--muted);
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2px 8px;
+            letter-spacing: 0.06em;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media(max-width:600px) {
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* FORM */
+        .field {
+            margin-bottom: 16px;
+        }
+
+        .lbl {
+            display: block;
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 10px 12px;
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: var(--blue);
+        }
+
+        input::placeholder {
+            color: var(--muted);
+        }
+
+        .inp-group {
+            display: flex;
+        }
+
+        .inp-group input {
+            border-radius: 6px 0 0 6px;
+            border-right: none;
+            flex: 1;
+        }
+
+        .eye-btn {
+            background: var(--surf2);
+            border: 1px solid var(--border);
+            border-radius: 0 6px 6px 0;
+            padding: 0 12px;
+            cursor: pointer;
+            color: var(--muted);
+            font-size: 14px;
+            transition: color 0.15s;
+        }
+
+        .eye-btn:hover {
+            color: var(--text);
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            background: var(--surf2);
+            border: none;
+            cursor: pointer;
+            accent-color: var(--purple);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--purple);
+            cursor: pointer;
+        }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 16px;
+            border-radius: 6px;
+            border: 1px solid var(--border2);
+            background: var(--surf2);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            background: var(--border);
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-blue {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: #0d1117;
+            font-weight: 600;
+        }
+
+        .btn-blue:hover {
+            background: #79b8ff;
+            border-color: #79b8ff;
+        }
+
+        .btn-sm {
+            padding: 6px 10px;
+            font-size: 11px;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 4px;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 20px 0;
+        }
+
+        /* PASSWORD TOOL */
+        .str-hdr {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .str-label {
+            font-family: 'Oxanium', monospace;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+        }
+
+        .str-score {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .bar-track {
+            height: 6px;
+            background: var(--surf2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s cubic-bezier(.4, 0, .2, 1), background 0.5s;
+            width: 0%;
+        }
+
+        .checks-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 14px;
+        }
+
+        .chk {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .chk.pass {
+            color: var(--green);
+        }
+
+        .chk.fail {
+            color: var(--red);
+        }
+
+        .chk-icon {
+            font-style: normal;
+            width: 14px;
+            flex-shrink: 0;
+        }
+
+        /* OUTPUT BLOCK */
+        .out-block {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 14px 16px;
+        }
+
+        .out-hdr {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .out-hdr::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+        }
+
+        .suggestions {
+            margin-top: 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--yellow);
+            border-radius: 0 6px 6px 0;
+            padding: 12px 14px;
+        }
+
+        .sug-title {
+            font-size: 10px;
+            color: var(--yellow);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .sug-item {
+            font-size: 12px;
+            color: var(--muted2);
+            padding: 3px 0;
+            display: flex;
+            gap: 8px;
+        }
+
+        .sug-item::before {
+            content: '›';
+            color: var(--muted);
+        }
+
+        /* HASH TOOL */
+        .hash-rows {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hash-row {
+            display: grid;
+            grid-template-columns: 70px 1fr 32px;
+            align-items: start;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hash-row:last-child {
+            border-bottom: none;
+        }
+
+        .hash-algo {
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding-top: 2px;
+        }
+
+        .hash-note {
+            font-size: 10px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .hash-val {
+            font-size: 11px;
+            color: var(--text);
+            word-break: break-all;
+            line-height: 1.7;
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--muted);
+            font-size: 15px;
+            padding-top: 1px;
+            transition: color 0.15s;
+        }
+
+        .copy-btn:hover {
+            color: var(--blue);
+        }
+
+        .info-box {
+            margin-top: 16px;
+            padding: 10px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .info-box strong {
+            color: var(--muted2);
+        }
+
+        /* CAESAR TOOL */
+        .shift-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .shift-lbl {
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .shift-val {
+            font-family: 'Oxanium', monospace;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--purple);
+            min-width: 30px;
+            text-align: right;
+        }
+
+        .cc-out {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--purple);
+            border-radius: 0 6px 6px 0;
+            padding: 14px 16px;
+            font-size: 14px;
+            color: var(--muted);
+            word-break: break-word;
+            line-height: 1.6;
+            min-height: 52px;
+        }
+
+        .cc-info {
+            margin-top: 12px;
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .bf-wrap {
+            max-height: 280px;
+            overflow-y: auto;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-top: 12px;
+        }
+
+        .bf-wrap::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .bf-wrap::-webkit-scrollbar-thumb {
+            background: var(--border2);
+            border-radius: 2px;
+        }
+
+        .bf-tbl {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .bf-tbl tr {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .bf-tbl tr:last-child {
+            border-bottom: none;
+        }
+
+        .bf-tbl td {
+            padding: 6px 10px;
+        }
+
+        .bf-tbl td:first-child {
+            color: var(--muted);
+            width: 64px;
+        }
+
+        /* EMPTY STATE */
+        .empty {
+            padding: 36px 20px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            font-size: 28px;
+            opacity: 0.3;
+            margin-bottom: 10px;
+        }
+
+        .empty-txt {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 28px 24px;
+        }
+
+        .ftr {
+            max-width: 960px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .ftr-txt {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .ftr-txt a {
+            color: var(--blue);
+            text-decoration: none;
+        }
+
+        .ftr-txt a:hover {
+            text-decoration: underline;
+        }
+
+        .ftr-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .ftag {
+            font-size: 10px;
+            color: var(--muted);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            padding: 2px 7px;
+            letter-spacing: 0.06em;
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--surf2);
+            border: 1px solid var(--green);
+            color: var(--green);
+            border-radius: 6px;
+            padding: 9px 16px;
+            font-size: 12px;
+            letter-spacing: 0.06em;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: all 0.2s;
+            z-index: 999;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* LOAD ANIMATIONS */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(12px);
+            animation: fadeUp 0.45s ease forwards;
+        }
+
+        .d1 {
+            animation-delay: 0.04s;
+        }
+
+        .d2 {
+            animation-delay: 0.1s;
+        }
+
+        .d3 {
+            animation-delay: 0.16s;
+        }
+
+        .d4 {
+            animation-delay: 0.22s;
+        }
+
+        /* STAT TABLE */
+        .stat-tbl {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .stat-tbl tr {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stat-tbl tr:last-child {
+            border-bottom: none;
+        }
+
+        .stat-tbl td {
+            padding: 6px 0;
+        }
+
+        .stat-tbl td:first-child {
+            color: var(--muted);
+            width: 50%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="toast" id="toast">Copied ✓</div>
+
+    <!-- HEADER ──────────────────────────────────────────────────────────────────── -->
+    <header>
+        <div class="hdr">
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5L12 1zm0 4l6 2.67V11c0 3.83-2.6 7.43-6 8.93-3.4-1.5-6-5.1-6-8.93V7.67L12 5z" />
+                    </svg>
+                </div>
+                <span class="logo-name">Cyber<span>Kit</span></span>
+            </a>
+            <div class="hdr-right">
+                <span class="hdr-badge">v1.0.0</span>
+                <a href="https://github.com/hamidshafiq1/cyberkit" target="_blank" rel="noopener" class="hdr-link">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
+                    </svg>
+                    GitHub
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO ─────────────────────────────────────────────────────────────────────── -->
+    <section class="hero">
+        <div class="eyebrow fade-up">Open-Source · Client-Side · Beginner Cybersecurity</div>
+        <h1 class="fade-up d1">Security Tools<br>in Your Browser<span class="cursor"></span></h1>
+        <p class="hero-desc fade-up d2">Password strength analyzer, cryptographic hash generator, and Caesar cipher
+            encoder — built with zero dependencies. No server. No tracking. Everything runs locally in your browser.</p>
+        <div class="stats fade-up d3">
+            <div class="stat">
+                <span class="stat-n">03</span>
+                <span class="stat-l">Tools</span>
+            </div>
+            <div class="sep"></div>
+            <div class="stat">
+                <span class="stat-n">0</span>
+                <span class="stat-l">Dependencies</span>
+            </div>
+            <div class="sep"></div>
+            <div class="stat">
+                <span class="stat-n">100%</span>
+                <span class="stat-l">Client-Side</span>
+            </div>
+            <div class="sep"></div>
+            <div class="stat">
+                <span class="stat-n">Python</span>
+                <span class="stat-l">CLI Version</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- TOOLS ────────────────────────────────────────────────────────────────────── -->
+    <section class="tools fade-up d4">
+
+        <!-- TAB NAV -->
+        <nav class="tab-nav" role="tablist" aria-label="Security Tools">
+            <button class="tab-btn active" data-tool="pw" onclick="switchTool('pw')" role="tab" aria-selected="true"
+                aria-controls="panel-pw">
+                <span class="tdot"></span> Password Analyzer
+            </button>
+            <button class="tab-btn" data-tool="hash" onclick="switchTool('hash')" role="tab" aria-selected="false"
+                aria-controls="panel-hash">
+                <span class="tdot"></span> Hash Generator
+            </button>
+            <button class="tab-btn" data-tool="cc" onclick="switchTool('cc')" role="tab" aria-selected="false"
+                aria-controls="panel-cc">
+                <span class="tdot"></span> Caesar Cipher
+            </button>
+        </nav>
+
+        <!-- ── PANEL: PASSWORD ───────────────────────────────────── -->
+        <div class="panel active" id="panel-pw" role="tabpanel">
+            <div class="card">
+                <div class="card-hdr">
+                    <div class="card-title"><span class="cdot cdot-g"></span> Password Strength Analyzer</div>
+                    <span class="card-tag">TOOL 01 / 03</span>
+                </div>
+                <div class="card-body">
+                    <div class="two-col">
+                        <!-- LEFT: INPUT + CHECKS -->
+                        <div>
+                            <div class="field">
+                                <label class="lbl" for="pw-inp">Password</label>
+                                <div class="inp-group">
+                                    <input type="password" id="pw-inp" placeholder="Enter password to analyze..."
+                                        autocomplete="off" oninput="analyzePw()">
+                                    <button class="eye-btn" onclick="togglePwVis()"
+                                        title="Toggle visibility">👁</button>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="lbl">Strength</label>
+                                <div class="str-hdr">
+                                    <span class="str-label" id="pw-lbl" style="color:var(--muted)">---</span>
+                                    <span class="str-score" id="pw-score">0 / 10 pts</span>
+                                </div>
+                                <div class="bar-track">
+                                    <div class="bar-fill" id="pw-bar"></div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="lbl">Checklist</label>
+                                <div class="checks-grid">
+                                    <div class="chk" id="c-len8"> <span class="chk-icon">○</span> Min 8 chars</div>
+                                    <div class="chk" id="c-len12"> <span class="chk-icon">○</span> Min 12 chars</div>
+                                    <div class="chk" id="c-upper"> <span class="chk-icon">○</span> Uppercase A-Z</div>
+                                    <div class="chk" id="c-lower"> <span class="chk-icon">○</span> Lowercase a-z</div>
+                                    <div class="chk" id="c-digit"> <span class="chk-icon">○</span> Digits 0-9</div>
+                                    <div class="chk" id="c-sym"> <span class="chk-icon">○</span> Symbols !@#</div>
+                                    <div class="chk" id="c-comm"> <span class="chk-icon">○</span> Not common</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- RIGHT: OUTPUT -->
+                        <div>
+                            <label class="lbl">Analysis Output</label>
+                            <div class="out-block" id="pw-out">
+                                <div class="empty">
+                                    <div class="empty-icon">🔐</div>
+                                    <div class="empty-txt">Start typing to analyze.</div>
+                                </div>
+                            </div>
+                            <div class="suggestions" id="pw-sug" style="display:none">
+                                <div class="sug-title">Suggestions</div>
+                                <div id="pw-tips"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── PANEL: HASH ───────────────────────────────────────── -->
+        <div class="panel" id="panel-hash" role="tabpanel">
+            <div class="card">
+                <div class="card-hdr">
+                    <div class="card-title"><span class="cdot cdot-b"></span> Cryptographic Hash Generator</div>
+                    <span class="card-tag">TOOL 02 / 03</span>
+                </div>
+                <div class="card-body">
+                    <div class="field">
+                        <label class="lbl" for="hash-inp">Input Text</label>
+                        <input type="text" id="hash-inp" placeholder="Enter text to hash..." autocomplete="off">
+                    </div>
+                    <div class="btn-row" style="margin-bottom:20px">
+                        <button class="btn btn-blue" onclick="genHashes()">⚡ Generate Hashes</button>
+                        <button class="btn btn-sm" onclick="clearHash()">Clear</button>
+                    </div>
+                    <div class="divider"></div>
+                    <div id="hash-out">
+                        <div class="empty">
+                            <div class="empty-icon">🔢</div>
+                            <div class="empty-txt">Enter text and click Generate Hashes.</div>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <strong>Note:</strong> MD5 and SHA-1 are cryptographically broken — never use them for security
+                        purposes. SHA-256 is the current standard. Hashes are one-way: the same input always produces
+                        the same output, but you cannot reverse a hash back to the original text.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── PANEL: CAESAR ─────────────────────────────────────── -->
+        <div class="panel" id="panel-cc" role="tabpanel">
+            <div class="card">
+                <div class="card-hdr">
+                    <div class="card-title"><span class="cdot cdot-p"></span> Caesar Cipher</div>
+                    <span class="card-tag">TOOL 03 / 03</span>
+                </div>
+                <div class="card-body">
+                    <div class="two-col">
+                        <!-- LEFT: INPUT -->
+                        <div>
+                            <div class="field">
+                                <label class="lbl" for="cc-inp">Plaintext / Ciphertext</label>
+                                <input type="text" id="cc-inp" placeholder="Enter text..." autocomplete="off">
+                            </div>
+                            <div class="field">
+                                <label class="lbl">Shift Amount</label>
+                                <div class="shift-row">
+                                    <input type="range" id="cc-shift" min="1" max="25" value="3" oninput="updShift()">
+                                    <span class="shift-val" id="sh-val">3</span>
+                                </div>
+                            </div>
+                            <div class="btn-row">
+                                <button class="btn btn-blue" onclick="runCC('encrypt')">🔒 Encrypt</button>
+                                <button class="btn" onclick="runCC('decrypt')">🔓 Decrypt</button>
+                                <button class="btn" onclick="bruteForce()">🔍 Brute Force</button>
+                            </div>
+                        </div>
+                        <!-- RIGHT: OUTPUT -->
+                        <div>
+                            <label class="lbl">Output</label>
+                            <div class="cc-out" id="cc-out">Output appears here...</div>
+                            <div class="cc-info">The Caesar cipher shifts each letter by N positions. Used by Julius
+                                Caesar circa 58 BC. Shift 13 = ROT13. Breakable with brute force in 25 attempts.</div>
+                        </div>
+                    </div>
+                    <!-- BRUTE FORCE TABLE -->
+                    <div id="bf-area" style="display:none">
+                        <div class="divider"></div>
+                        <div
+                            style="font-size:10px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">
+                            Brute Force — All 25 Shifts</div>
+                        <div class="bf-wrap">
+                            <table class="bf-tbl" id="bf-tbl"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- FOOTER ───────────────────────────────────────────────────────────────────── -->
+    <footer>
+        <div class="ftr">
+            <div class="ftr-txt">
+                Built by <a href="https://github.com/hamidshafiq1" target="_blank" rel="noopener">Hamid Shafiq</a>
+                · University of Haripur
+            </div>
+            <div class="ftr-tags">
+                <span class="ftag">HTML</span>
+                <span class="ftag">CSS</span>
+                <span class="ftag">JavaScript</span>
+                <span class="ftag">Web Crypto API</span>
+                <span class="ftag">MIT License</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ── JAVASCRIPT ─────────────────────────────────────────────────────────────── -->
+    <script>
+        /* ─── COMMON PASSWORDS LIST ─────────────────────────────────────────────────── */
+        const COMMON = [
+            "password", "123456", "password123", "admin", "letmein", "qwerty", "abc123", "iloveyou",
+            "111111", "123123", "1234567890", "password1", "12345678", "superman", "batman", "dragon",
+            "master", "monkey", "pass", "login", "welcome", "hello", "shadow", "sunshine", "princess",
+            "football", "baseball", "michael", "shadow", "monkey", "letmein", "696969", "mustang",
+            "access", "shadow", "master", "jordan", "harley", "ranger", "donald", "passw0rd"
+        ];
+
+        /* ─── UTILS ─────────────────────────────────────────────────────────────────── */
+        function toast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+        function copy(text) {
+            navigator.clipboard.writeText(text).then(() => toast('Copied to clipboard ✓'));
+        }
+
+        /* ─── TAB SWITCHING ─────────────────────────────────────────────────────────── */
+        function switchTool(id) {
+            ['pw', 'hash', 'cc'].forEach(t => {
+                document.getElementById('panel-' + t).classList.toggle('active', t === id);
+                const btn = document.querySelector('[data-tool="' + t + '"]');
+                btn.classList.toggle('active', t === id);
+                btn.setAttribute('aria-selected', String(t === id));
+            });
+        }
+
+        /* ─── PASSWORD ANALYZER ─────────────────────────────────────────────────────── */
+        let pwVis = false;
+        function togglePwVis() {
+            pwVis = !pwVis;
+            document.getElementById('pw-inp').type = pwVis ? 'text' : 'password';
+        }
+
+        function setChk(id, pass) {
+            const el = document.getElementById(id);
+            el.className = 'chk ' + (pass ? 'pass' : 'fail');
+            el.querySelector('.chk-icon').textContent = pass ? '✓' : '✗';
+        }
+
+        function resetChks() {
+            ['c-len8', 'c-len12', 'c-upper', 'c-lower', 'c-digit', 'c-sym', 'c-comm'].forEach(id => {
+                const el = document.getElementById(id);
+                el.className = 'chk';
+                el.querySelector('.chk-icon').textContent = '○';
+            });
+        }
+
+        function analyzePw() {
+            const pw = document.getElementById('pw-inp').value;
+            const outEl = document.getElementById('pw-out');
+            const sugEl = document.getElementById('pw-sug');
+            const tipsEl = document.getElementById('pw-tips');
+
+            if (!pw) {
+                outEl.innerHTML = '<div class="empty"><div class="empty-icon">🔐</div><div class="empty-txt">Start typing to analyze.</div></div>';
+                sugEl.style.display = 'none';
+                document.getElementById('pw-lbl').textContent = '---';
+                document.getElementById('pw-lbl').style.color = 'var(--muted)';
+                document.getElementById('pw-score').textContent = '0 / 10 pts';
+                document.getElementById('pw-bar').style.width = '0%';
+                resetChks();
+                return;
+            }
+
+            const rules = [
+                ['c-len8', pw.length >= 8, 1, 'Use at least 8 characters.'],
+                ['c-len12', pw.length >= 12, 2, '12+ characters greatly strengthens the password.'],
+                ['c-upper', /[A-Z]/.test(pw), 1, 'Add at least one uppercase letter (A-Z).'],
+                ['c-lower', /[a-z]/.test(pw), 1, 'Add at least one lowercase letter (a-z).'],
+                ['c-digit', /\d/.test(pw), 1, 'Include at least one digit (0-9).'],
+                ['c-sym', /[^a-zA-Z0-9]/.test(pw), 2, 'Add special symbols like !@#$%^&*().'],
+                ['c-comm', !COMMON.includes(pw.toLowerCase()), 2, 'This is a commonly known password — change it immediately.'],
+            ];
+
+            let score = 0;
+            const failed = [];
+            rules.forEach(([id, pass, w, tip]) => {
+                setChk(id, pass);
+                if (pass) score += w; else failed.push(tip);
+            });
+
+            const pct = Math.round(score / 10 * 100);
+            const charSet = (/[a-z]/.test(pw) ? 26 : 0) + (/[A-Z]/.test(pw) ? 26 : 0) + (/\d/.test(pw) ? 10 : 0) + (/[^a-zA-Z0-9]/.test(pw) ? 32 : 0) || 26;
+            const entropy = Math.round(pw.length * Math.log2(charSet));
+
+            const levels = [[25, 'WEAK', '#f85149'], [50, 'MODERATE', '#d29922'], [75, 'STRONG', '#3fb950'], [101, 'VERY STRONG', '#58a6ff']];
+            const [, label, color] = levels.find(([t]) => pct <= t);
+
+            document.getElementById('pw-bar').style.cssText = `width:${pct}%;background:${color}`;
+            document.getElementById('pw-lbl').textContent = label;
+            document.getElementById('pw-lbl').style.color = color;
+            document.getElementById('pw-score').textContent = score + ' / 10 pts';
+
+            outEl.innerHTML = `
+    <div class="out-hdr">Analysis Result</div>
+    <table class="stat-tbl">
+      <tr><td>Length</td><td>${pw.length} characters</td></tr>
+      <tr><td>Entropy</td><td>~${entropy} bits</td></tr>
+      <tr><td>Character set</td><td>${charSet} symbols</td></tr>
+      <tr><td>Score</td><td style="color:${color}">${score}/10 (${pct}%)</td></tr>
+      <tr><td>Rating</td><td style="color:${color};font-weight:600;letter-spacing:0.06em">${label}</td></tr>
+    </table>`;
+
+            if (failed.length) {
+                sugEl.style.display = 'block';
+                tipsEl.innerHTML = failed.map(t => `<div class="sug-item">${t}</div>`).join('');
+            } else {
+                sugEl.style.display = 'none';
+            }
+        }
+
+        /* ─── HASH GENERATOR ────────────────────────────────────────────────────────── */
+        /* Pure JS MD5 (RFC 1321) */
+        function md5(s) {
+            function safeAdd(x, y) { var lsw = (x & 0xFFFF) + (y & 0xFFFF); return (((x >> 16) + (y >> 16) + (lsw >> 16)) << 16) | (lsw & 0xFFFF) }
+            function rol(n, c) { return (n << c) | (n >>> (32 - c)) }
+            function cmn(q, a, b, x, s, t) { return safeAdd(rol(safeAdd(safeAdd(a, q), safeAdd(x, t)), s), b) }
+            function ff(a, b, c, d, x, s, t) { return cmn((b & c) | ((~b) & d), a, b, x, s, t) }
+            function gg(a, b, c, d, x, s, t) { return cmn((b & d) | (c & (~d)), a, b, x, s, t) }
+            function hh(a, b, c, d, x, s, t) { return cmn(b ^ c ^ d, a, b, x, s, t) }
+            function ii(a, b, c, d, x, s, t) { return cmn(c ^ (b | (~d)), a, b, x, s, t) }
+            var m = [], i;
+            for (i = 0; i < s.length * 2; i += 8) m[i >> 5] |= (s.charCodeAt(i / 8) & 255) << (i % 32);
+            m[(s.length * 8) >> 5] |= 0x80 << ((s.length * 8) % 32);
+            m[(((s.length * 8 + 64) >>> 9) << 4) + 14] = s.length * 8;
+            var a = 1732584193, b = -271733879, c = -1732584194, d = 271733878, oa, ob, oc, od;
+            for (i = 0; i < m.length; i += 16) {
+                oa = a; ob = b; oc = c; od = d;
+                a = ff(a, b, c, d, m[i + 0], 7, -680876936); d = ff(d, a, b, c, m[i + 1], 12, -389564586); c = ff(c, d, a, b, m[i + 2], 17, 606105819); b = ff(b, c, d, a, m[i + 3], 22, -1044525330);
+                a = ff(a, b, c, d, m[i + 4], 7, -176418897); d = ff(d, a, b, c, m[i + 5], 12, 1200080426); c = ff(c, d, a, b, m[i + 6], 17, -1473231341); b = ff(b, c, d, a, m[i + 7], 22, -45705983);
+                a = ff(a, b, c, d, m[i + 8], 7, 1770035416); d = ff(d, a, b, c, m[i + 9], 12, -1958414417); c = ff(c, d, a, b, m[i + 10], 17, -42063); b = ff(b, c, d, a, m[i + 11], 22, -1990404162);
+                a = ff(a, b, c, d, m[i + 12], 7, 1804603682); d = ff(d, a, b, c, m[i + 13], 12, -40341101); c = ff(c, d, a, b, m[i + 14], 17, -1502002290); b = ff(b, c, d, a, m[i + 15], 22, 1236535329);
+                a = gg(a, b, c, d, m[i + 1], 5, -165796510); d = gg(d, a, b, c, m[i + 6], 9, -1069501632); c = gg(c, d, a, b, m[i + 11], 14, 643717713); b = gg(b, c, d, a, m[i + 0], 20, -373897302);
+                a = gg(a, b, c, d, m[i + 5], 5, -701558691); d = gg(d, a, b, c, m[i + 10], 9, 38016083); c = gg(c, d, a, b, m[i + 15], 14, -660478335); b = gg(b, c, d, a, m[i + 4], 20, -405537848);
+                a = gg(a, b, c, d, m[i + 9], 5, 568446438); d = gg(d, a, b, c, m[i + 14], 9, -1019803690); c = gg(c, d, a, b, m[i + 3], 14, -187363961); b = gg(b, c, d, a, m[i + 8], 20, 1163531501);
+                a = gg(a, b, c, d, m[i + 13], 5, -1444681467); d = gg(d, a, b, c, m[i + 2], 9, -51403784); c = gg(c, d, a, b, m[i + 7], 14, 1735328473); b = gg(b, c, d, a, m[i + 12], 20, -1926607734);
+                a = hh(a, b, c, d, m[i + 5], 4, -378558); d = hh(d, a, b, c, m[i + 8], 11, -2022574463); c = hh(c, d, a, b, m[i + 11], 16, 1839030562); b = hh(b, c, d, a, m[i + 14], 23, -35309556);
+                a = hh(a, b, c, d, m[i + 1], 4, -1530992060); d = hh(d, a, b, c, m[i + 4], 11, 1272893353); c = hh(c, d, a, b, m[i + 7], 16, -155497632); b = hh(b, c, d, a, m[i + 10], 23, -1094730640);
+                a = hh(a, b, c, d, m[i + 13], 4, 681279174); d = hh(d, a, b, c, m[i + 0], 11, -358537222); c = hh(c, d, a, b, m[i + 3], 16, -722521979); b = hh(b, c, d, a, m[i + 6], 23, 76029189);
+                a = hh(a, b, c, d, m[i + 9], 4, -640364487); d = hh(d, a, b, c, m[i + 12], 11, -421815835); c = hh(c, d, a, b, m[i + 15], 16, 530742520); b = hh(b, c, d, a, m[i + 2], 23, -995338651);
+                a = ii(a, b, c, d, m[i + 0], 6, -198630844); d = ii(d, a, b, c, m[i + 7], 10, 1126891415); c = ii(c, d, a, b, m[i + 14], 15, -1416354905); b = ii(b, c, d, a, m[i + 5], 21, -57434055);
+                a = ii(a, b, c, d, m[i + 12], 6, 1700485571); d = ii(d, a, b, c, m[i + 3], 10, -1894986606); c = ii(c, d, a, b, m[i + 10], 15, -1051523); b = ii(b, c, d, a, m[i + 1], 21, -2054922799);
+                a = ii(a, b, c, d, m[i + 8], 6, 1873313359); d = ii(d, a, b, c, m[i + 15], 10, -30611744); c = ii(c, d, a, b, m[i + 6], 15, -1560198380); b = ii(b, c, d, a, m[i + 13], 21, 1309151649);
+                a = ii(a, b, c, d, m[i + 4], 6, -145523070); d = ii(d, a, b, c, m[i + 11], 10, -1120210379); c = ii(c, d, a, b, m[i + 2], 15, 718787259); b = ii(b, c, d, a, m[i + 9], 21, -343485551);
+                a = safeAdd(a, oa); b = safeAdd(b, ob); c = safeAdd(c, oc); d = safeAdd(d, od);
+            }
+            return [a, b, c, d].map(n => { let h = ''; for (let j = 0; j < 32; j += 8)h += ((n >> j) & 0xff).toString(16).padStart(2, '0'); return h; }).join('');
+        }
+
+        /* SHA via Web Crypto API */
+        async function sha(text, algo) {
+            const buf = await crypto.subtle.digest(algo, new TextEncoder().encode(text));
+            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function genHashes() {
+            const text = document.getElementById('hash-inp').value.trim();
+            const outEl = document.getElementById('hash-out');
+            if (!text) {
+                outEl.innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-txt">Enter some text first.</div></div>';
+                return;
+            }
+            outEl.innerHTML = '<div style="text-align:center;padding:24px;color:var(--muted);font-size:12px">Computing...</div>';
+            const [s1, s256, s512] = await Promise.all([sha(text, 'SHA-1'), sha(text, 'SHA-256'), sha(text, 'SHA-512')]);
+            const m = md5(text);
+            const rows = [
+                ['MD5', m, '128-bit · legacy, broken'],
+                ['SHA-1', s1, '160-bit · broken, avoid'],
+                ['SHA-256', s256, '256-bit · current standard ✓'],
+                ['SHA-512', s512, '512-bit · maximum strength'],
+            ];
+            outEl.innerHTML = '<div class="hash-rows">' + rows.map(([algo, val, note]) => `
+    <div class="hash-row">
+      <div>
+        <div class="hash-algo">${algo}</div>
+        <div class="hash-note">${note}</div>
+      </div>
+      <div class="hash-val">${val}</div>
+      <button class="copy-btn" onclick="copy('${val}')" title="Copy hash">⎘</button>
+    </div>`).join('') + '</div>';
+        }
+
+        function clearHash() {
+            document.getElementById('hash-inp').value = '';
+            document.getElementById('hash-out').innerHTML =
+                '<div class="empty"><div class="empty-icon">🔢</div><div class="empty-txt">Enter text and click Generate Hashes.</div></div>';
+        }
+
+        /* ─── CAESAR CIPHER ─────────────────────────────────────────────────────────── */
+        function updShift() {
+            document.getElementById('sh-val').textContent = document.getElementById('cc-shift').value;
+        }
+
+        function caesarShift(text, shift) {
+            return text.split('').map(c => {
+                if (/[A-Z]/.test(c)) return String.fromCharCode((c.charCodeAt(0) - 65 + shift + 26) % 26 + 65);
+                if (/[a-z]/.test(c)) return String.fromCharCode((c.charCodeAt(0) - 97 + shift + 26) % 26 + 97);
+                return c;
+            }).join('');
+        }
+
+        function runCC(mode) {
+            const text = document.getElementById('cc-inp').value;
+            const shift = parseInt(document.getElementById('cc-shift').value) || 3;
+            const outEl = document.getElementById('cc-out');
+            document.getElementById('bf-area').style.display = 'none';
+            if (!text) { outEl.textContent = 'Enter some text first.'; outEl.style.color = 'var(--muted)'; return; }
+            const result = caesarShift(text, mode === 'encrypt' ? shift : -shift);
+            outEl.textContent = result;
+            outEl.style.color = 'var(--text)';
+        }
+
+        function bruteForce() {
+            const text = document.getElementById('cc-inp').value;
+            const outEl = document.getElementById('cc-out');
+            const bfArea = document.getElementById('bf-area');
+            const tbl = document.getElementById('bf-tbl');
+            if (!text) { outEl.textContent = 'Enter some text first.'; outEl.style.color = 'var(--muted)'; bfArea.style.display = 'none'; return; }
+            outEl.textContent = 'All 25 decryptions shown below ↓';
+            outEl.style.color = 'var(--muted)';
+            bfArea.style.display = 'block';
+            tbl.innerHTML = Array.from({ length: 25 }, (_, i) =>
+                `<tr><td>shift ${String(i + 1).padStart(2, ' ')}</td><td>${caesarShift(text, -(i + 1))}</td></tr>`
+            ).join('');
+        }
+
+        /* ─── KEYBOARD SHORTCUTS ────────────────────────────────────────────────────── */
+        document.getElementById('hash-inp').addEventListener('keydown', e => { if (e.key === 'Enter') genHashes(); });
+        document.getElementById('cc-inp').addEventListener('keydown', e => { if (e.key === 'Enter') runCC('encrypt'); });
+    </script>
+</body>
+
+</html>
