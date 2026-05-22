@@ -2,6 +2,8 @@
 
 A modular, zero-dependency beginner cybersecurity sandbox implementation optimized for client-side cross-platform utility. CyberKit offers simultaneous distribution pipelines via native Terminal CLI interface and lightweight single-page application structure[cite: 1, 2].
 
+LIVE AT: https://hamidshafiq1.github.io/cyberkit/
+
 ## Feature Components
 
 * **Password Strength Assessment Matrix**: Algorithmic scoring evaluating structural entropy constraints, tracking key space configurations (uppercase, lowercase, integers, symbol pools) intersected with known standard dictionary exclusions[cite: 1, 2].
